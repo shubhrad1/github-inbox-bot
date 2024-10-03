@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Download all dependencies
+echo "Downloading dependencies..."
+go mod download
+
+# Load environment variables
+# echo "Loading environment variables..."
+# cat <<EOF > .env.production
+# export GITHUB_TOKEN=${VSCODE_NONCE}
+# export SLACK_TOKEN=${VSCODE_NONCE}
+# export SLACK_CHANNEL=${VSCODE_NONCE}
+# EOF
+touch .env
+echo "GITHUB_TOKEN=${GITHUB_TOKEN}" > .env
+echo "SLACK_TOKEN=${SLACK_TOKEN}" > .env
+echo "SLACK_CHANNEL=${SLACK_CHANNEL}" > .env
+
+
+# Source the .env file to load the environment variables
+source .env.production
+
+# Build the Go app
+echo "Building the Go app..."
+go build -o github-inbox-bot
+
+echo "Build completed successfully."
