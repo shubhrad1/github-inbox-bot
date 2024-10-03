@@ -36,6 +36,7 @@ A bot to manage your GitHub notifications directly from Slack.
     ./github-inbox-bot
     ```
 2. Invite the bot to your Slack channel and start receiving notifications.
+3. <b>IMPORTANT!!!</b> - Make sure the TOKEN has not expired. In case the GitHub Token has expired, manually change the token in al environments. Adject "days-until-expiry" in sendExpiryTokenNotification.go
 
 ## Contributing
 
