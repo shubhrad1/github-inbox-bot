@@ -46,12 +46,38 @@ func makeNotification(jsondata string)  {
 		}
 
 		notification:=Notification{}
-		notification.Repo = v["repository"].(map[string]interface{})["full_name"].(string)
-		notification.Sub = v["subject"].(map[string]interface{})["title"].(string)
-		notification.Type = v["subject"].(map[string]interface{})["type"].(string)
-		notification.Action = v["reason"].(string)
-		bodyURL := v["subject"].(map[string]interface{})["latest_comment_url"].(string)
+		repo,ok := v["repository"].(map[string]interface{})["full_name"].(string)
+		if !ok {
+			repo = " "
+		}else{
+			notification.Repo = repo
+		}
+
+		sub,ok := v["subject"].(map[string]interface{})["title"].(string)
+		if !ok {
+			sub = " "
+		}else{
+			notification.Sub = sub
+		}
+
+		notifType,ok := v["subject"].(map[string]interface{})["type"].(string)
+		if !ok {
+			notifType = " "
+		}else{
+		notification.Type = notifType
+		}
+		action,ok := v["reason"].(string)
+		if !ok {
+			action = " "
+		}else{
+			notification.Action = action
+		}
+		bodyURL,ok := v["subject"].(map[string]interface{})["latest_comment_url"].(string)
+		if !ok {
+			notification.Message= " "
+		}else{
 		notification.Message = getBody(bodyURL)
+		}
 		visited = append(visited, id)
 
 		blockKitEncoding(notification.Repo, notification.Sub, notification.Type, notification.Action, notification.Message)
@@ -92,7 +118,10 @@ func getBody(url string) string  {
 
 	json.Unmarshal(body, &resolver)
 
-	comment:=resolver["body"].(string)
+	comment,ok:=resolver["body"].(string)
+	if !ok {
+		comment = " "
+	}
 	return comment
 	
 	
